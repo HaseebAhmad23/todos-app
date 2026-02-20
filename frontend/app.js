@@ -23,4 +23,31 @@ function showDashboard() {
   loadTodos();
 }
 
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const el = document.getElementById('login-error');
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  el.classList.add('hidden');
+  try {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_name: username, password })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      currentUser = data.user_name || username;
+      sessionStorage.setItem(USER_KEY, currentUser);
+      showDashboard();
+    } else {
+      el.textContent = data.error || 'Login failed';
+      el.classList.remove('hidden');
+    }
+  } catch (err) {
+    el.textContent = 'Connection failed. Is the server running?';
+    el.classList.remove('hidden');
+  }
+});
+
 
