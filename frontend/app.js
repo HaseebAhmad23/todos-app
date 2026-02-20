@@ -90,21 +90,23 @@ async function loadTodos() {
     const res = await fetch(`${API_BASE}/user/${currentUser}/todos`);
     const data = await res.json();
     const todos = res.ok ? (data.todos || []) : [];
-    list.innerHTML = todos.map((t, i) => `
-      <li class="todo-item ${t.completed ? 'completed' : ''}" data-id="${i}">
-        <div class="todo-check"></div>
-        <div class="todo-body">
-          <p class="todo-title">${escapeHtml(t.title)}</p>
-          ${t.description ? `<p class="todo-desc">${escapeHtml(t.description)}</p>` : ''}
-          ${formatDueAt(t.due_at) ? `<p class="todo-due">${formatDueAt(t.due_at)}</p>` : ''}
-        </div>
-      </li>
-    `).join('') || '<li class="todo-item" style="opacity:0.6">No todos yet. Add one above.</li>';
+    list.innerHTML = todos.length
+      ? todos.map((t, i) => `
+          <li class="todo-item ${t.completed ? 'completed' : ''}" data-id="${i}">
+            <div class="todo-check"></div>
+            <div class="todo-body">
+              <p class="todo-title">${escapeHtml(t.title)}</p>
+              ${t.description ? `<p class="todo-desc">${escapeHtml(t.description)}</p>` : ''}
+              ${formatDueAt(t.due_at) ? `<p class="todo-due">${formatDueAt(t.due_at)}</p>` : ''}
+            </div>
+          </li>
+        `).join('')
+      : '<li class="todo-item empty-state">No tasks yet — add one above to get started</li>';
     list.querySelectorAll('.todo-check').forEach(btn => {
       btn.addEventListener('click', () => toggleTodo(btn.closest('.todo-item').dataset.id));
     });
   } catch (err) {
-    list.innerHTML = '<li class="todo-item" style="color:var(--error)">Failed to load todos.</li>';
+    list.innerHTML = '<li class="todo-item empty-state" style="color:var(--error)">Failed to load todos. Check your connection.</li>';
   }
 }
 

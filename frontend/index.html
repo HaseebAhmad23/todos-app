@@ -7,64 +7,82 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="app">
     <!-- Auth Screen -->
     <div id="auth-screen" class="screen">
-      <div class="auth-card">
-        <h1>Todo App</h1>
-        <p class="subtitle">Sign in or create an account</p>
-
-        <form id="login-form" class="auth-form">
-          <h2>Sign in</h2>
-          <input type="text" id="login-username" placeholder="Username" required>
-          <input type="password" id="login-password" placeholder="Password" required>
-          <button type="submit">Sign in</button>
-          <p id="login-error" class="error hidden"></p>
-        </form>
-
-        <hr>
-
-        <form id="register-form" class="auth-form">
-          <h2>Create account</h2>
-          <input type="text" id="reg-username" placeholder="Username" required>
-          <input type="password" id="reg-password" placeholder="Password" required>
-          <button type="submit">Create account</button>
-          <p id="reg-error" class="error hidden"></p>
-        </form>
+      <div class="auth-wrapper">
+        <div class="auth-brand">
+          <span class="auth-logo">✓</span>
+          <h1>Todo</h1>
+          <p class="auth-tagline">Stay organized, get things done</p>
+        </div>
+        <div class="auth-card">
+          <form id="login-form" class="auth-form">
+            <h2>Welcome back</h2>
+            <div class="input-group">
+              <input type="text" id="login-username" placeholder="Username" required autocomplete="username">
+              <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+            </div>
+            <button type="submit">Sign in</button>
+            <p id="login-error" class="error hidden"></p>
+          </form>
+          <div class="auth-divider">
+            <span>or</span>
+          </div>
+          <form id="register-form" class="auth-form">
+            <h2>Create account</h2>
+            <div class="input-group">
+              <input type="text" id="reg-username" placeholder="Username" required autocomplete="username">
+              <input type="password" id="reg-password" placeholder="Password" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn-secondary">Create account</button>
+            <p id="reg-error" class="error hidden"></p>
+          </form>
+          <p class="demo-hint">Try it: <kbd>demo</kbd> / <kbd>demo</kbd></p>
+        </div>
       </div>
-      <p class="demo-hint">Demo: demo / demo</p>
     </div>
 
     <!-- Todo Dashboard -->
     <div id="dashboard-screen" class="screen hidden">
       <header class="header">
-        <h1>My Todos</h1>
-        <div class="header-actions">
-          <span id="current-user" class="user-badge"></span>
-          <button id="btn-logout">Log out</button>
+        <div class="header-left">
+          <span class="header-logo">✓</span>
+          <div>
+            <h1>My Tasks</h1>
+            <span id="current-user" class="user-badge"></span>
+          </div>
         </div>
+        <button id="btn-logout" class="btn-ghost">Log out</button>
       </header>
 
       <div class="dashboard">
         <form id="add-todo-form" class="add-form">
-          <div class="add-form-main">
+          <div class="add-form-fields">
             <input type="text" id="todo-title" placeholder="What needs to be done?" required>
-            <input type="text" id="todo-desc" placeholder="Description (optional)">
+            <input type="text" id="todo-desc" placeholder="Add a note (optional)">
+            <div class="add-form-datetime">
+              <div class="datetime-group">
+                <label for="todo-date">Date</label>
+                <input type="date" id="todo-date">
+              </div>
+              <div class="datetime-group">
+                <label for="todo-time">Time</label>
+                <input type="time" id="todo-time">
+              </div>
+            </div>
           </div>
-          <div class="add-form-datetime">
-            <label for="todo-date">Date</label>
-            <input type="date" id="todo-date">
-            <label for="todo-time">Time</label>
-            <input type="time" id="todo-time">
-          </div>
-          <button type="submit">Add</button>
+          <button type="submit" class="btn-add">Add task</button>
         </form>
         <p id="add-error" class="error hidden"></p>
 
-        <ul id="todo-list" class="todo-list"></ul>
+        <div class="todo-section">
+          <h3 class="todo-section-title">Tasks</h3>
+          <ul id="todo-list" class="todo-list"></ul>
+        </div>
       </div>
     </div>
   </div>
