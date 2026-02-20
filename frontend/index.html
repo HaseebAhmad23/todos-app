@@ -37,6 +37,27 @@
       </div>
       <p class="demo-hint">Demo: demo / demo</p>
     </div>
+
+    <!-- Todo Dashboard -->
+    <div id="dashboard-screen" class="screen hidden">
+      <header class="header">
+        <h1>My Todos</h1>
+        <div class="header-actions">
+          <span id="current-user" class="user-badge"></span>
+          <button id="btn-logout">Log out</button>
+        </div>
+      </header>
+
+      <div class="dashboard">
+        <form id="add-todo-form" class="add-form">
+          <input type="text" id="todo-title" placeholder="What needs to be done?" required>
+          <input type="text" id="todo-desc" placeholder="Description (optional)">
+          <button type="submit">Add</button>
+        </form>
+        <p id="add-error" class="error hidden"></p>
+
+        <ul id="todo-list" class="todo-list"></ul>
+      </div>
     </div>
   </div>
   <script src="app.js"></script>
