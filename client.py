@@ -15,6 +15,14 @@ def main():
     r = requests.post(f'{BASE}/login', json={'user_name': 'testuser', 'password': 'test123'})
     print(f'Login:    {r.status_code} - {r.json()}')
 
+    # Add todo
+    r = requests.post(f'{BASE}/user/testuser/todos', json={'title': 'First task', 'description': 'Demo'})
+    print(f'Add todo: {r.status_code} - {r.json()}')
+
+    # Get todos
+    r = requests.get(f'{BASE}/user/testuser/todos')
+    print(f'Get todos: {r.status_code} - {r.json()}')
+
     print('-' * 40 + '\nDone. Open http://127.0.0.1:5000 for the web UI.')
 
 
