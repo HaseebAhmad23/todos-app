@@ -96,6 +96,7 @@ async function loadTodos() {
         <div class="todo-body">
           <p class="todo-title">${escapeHtml(t.title)}</p>
           ${t.description ? `<p class="todo-desc">${escapeHtml(t.description)}</p>` : ''}
+          ${formatDueAt(t.due_at) ? `<p class="todo-due">${formatDueAt(t.due_at)}</p>` : ''}
         </div>
       </li>
     `).join('') || '<li class="todo-item" style="opacity:0.6">No todos yet. Add one above.</li>';
@@ -108,9 +109,17 @@ async function loadTodos() {
 }
 
 function escapeHtml(s) {
+  if (!s) return '';
   const div = document.createElement('div');
   div.textContent = s;
   return div.innerHTML;
+}
+
+function formatDueAt(dueAt) {
+  if (!dueAt) return '';
+  const d = new Date(dueAt);
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' });
 }
 
 async function toggleTodo(id) {
@@ -127,17 +136,22 @@ document.getElementById('add-todo-form').addEventListener('submit', async (e) =>
   const el = document.getElementById('add-error');
   const title = document.getElementById('todo-title').value.trim();
   const desc = document.getElementById('todo-desc').value.trim();
+  const date = document.getElementById('todo-date').value;
+  const time = document.getElementById('todo-time').value;
+  const due_at = date ? `${date}T${time || '00:00'}` : null;
   el.classList.add('hidden');
   try {
     const res = await fetch(`${API_BASE}/user/${currentUser}/todos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description: desc })
+      body: JSON.stringify({ title, description: desc, due_at: due_at || undefined })
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok) {
       document.getElementById('todo-title').value = '';
       document.getElementById('todo-desc').value = '';
+      document.getElementById('todo-date').value = '';
+      document.getElementById('todo-time').value = '';
       loadTodos();
     } else {
       el.textContent = data.error || 'Failed to add';
