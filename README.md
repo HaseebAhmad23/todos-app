@@ -6,7 +6,16 @@
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-Backend-black?style=for-the-badge&logo=flask&logoColor=white)
 
-A simple full-stack todo application with user accounts.
+A simple full-stack todo application with user accounts. 
+
+## Stack:
+
+- HTM
+- CSS
+- Vanilla JavaScript
+- TypeScript
+- Flask
+- Python
 
 ## Quick start
 
