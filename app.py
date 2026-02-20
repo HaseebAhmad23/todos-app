@@ -66,7 +66,26 @@ def login():
         return jsonify({'error': str(e)}), 500
 
 
+# ----- Frontend -----
 
+@app.route('/')
+def serve_frontend():
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+
+@app.route('/<path:path>')
+def serve_static(path):
+    if (FRONTEND_DIR / path).exists():
+        return send_from_directory(FRONTEND_DIR, path)
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Todo app server')
+    parser.add_argument('--host', type=str, default='127.0.0.1')
+    parser.add_argument('--port', type=int, default=5000)
+    args = parser.parse_args()
+    app.run(host=args.host, port=args.port, debug=True)
 
 
 if __name__ == '__main__':
