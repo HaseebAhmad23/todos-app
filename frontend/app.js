@@ -50,4 +50,37 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   }
 });
 
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const el = document.getElementById('reg-error');
+  const username = document.getElementById('reg-username').value.trim();
+  const password = document.getElementById('reg-password').value;
+  el.classList.add('hidden');
+  try {
+    const res = await fetch(`${API_BASE}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_name: username, password })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      currentUser = username;
+      sessionStorage.setItem(USER_KEY, currentUser);
+      showDashboard();
+    } else {
+      el.textContent = data.error || 'Registration failed';
+      el.classList.remove('hidden');
+    }
+  } catch (err) {
+    el.textContent = 'Connection failed. Is the server running?';
+    el.classList.remove('hidden');
+  }
+});
+
+document.getElementById('btn-logout').addEventListener('click', () => {
+  sessionStorage.removeItem(USER_KEY);
+  currentUser = null;
+  showAuth();
+});
+
 
