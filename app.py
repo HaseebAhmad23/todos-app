@@ -86,10 +86,12 @@ def create_todo(user_name):
     title = (data.get('title') or '').strip()
     if not title:
         return jsonify({'error': 'Title required'}), 400
+    due_at = (data.get('due_at') or '').strip()  # ISO format: YYYY-MM-DDTHH:mm
     todo = {
         'id': len(users_data[user_name].todos),
         'title': title,
         'description': (data.get('description') or '').strip(),
+        'due_at': due_at or None,
         'completed': False
     }
     users_data[user_name].todos.append(todo)
