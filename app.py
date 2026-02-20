@@ -66,6 +66,47 @@ def login():
         return jsonify({'error': str(e)}), 500
 
 
+# ----- Todos -----
+
+@app.route('/user/<user_name>/todos', methods=['GET'])
+def get_todos(user_name):
+    if user_name not in users_data:
+        return jsonify({'error': 'User not found'}), 404
+    todos = users_data[user_name].todos
+    return jsonify({'todos': todos}), 200
+
+
+@app.route('/user/<user_name>/todos', methods=['POST'])
+def create_todo(user_name):
+    if user_name not in users_data:
+        return jsonify({'error': 'User not found'}), 404
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Invalid JSON'}), 400
+    title = (data.get('title') or '').strip()
+    if not title:
+        return jsonify({'error': 'Title required'}), 400
+    todo = {
+        'id': len(users_data[user_name].todos),
+        'title': title,
+        'description': (data.get('description') or '').strip(),
+        'completed': False
+    }
+    users_data[user_name].todos.append(todo)
+    return jsonify({'msg': 'Todo added', 'todo': todo}), 201
+
+
+@app.route('/user/<user_name>/todos/<int:todo_id>', methods=['PATCH'])
+def toggle_todo(user_name, todo_id):
+    if user_name not in users_data:
+        return jsonify({'error': 'User not found'}), 404
+    todos = users_data[user_name].todos
+    if todo_id < 0 or todo_id >= len(todos):
+        return jsonify({'error': 'Todo not found'}), 404
+    todos[todo_id]['completed'] = not todos[todo_id]['completed']
+    return jsonify({'todo': todos[todo_id]}), 200
+
+
 # ----- Frontend -----
 
 @app.route('/')
