@@ -50,8 +50,16 @@
 
       <div class="dashboard">
         <form id="add-todo-form" class="add-form">
-          <input type="text" id="todo-title" placeholder="What needs to be done?" required>
-          <input type="text" id="todo-desc" placeholder="Description (optional)">
+          <div class="add-form-main">
+            <input type="text" id="todo-title" placeholder="What needs to be done?" required>
+            <input type="text" id="todo-desc" placeholder="Description (optional)">
+          </div>
+          <div class="add-form-datetime">
+            <label for="todo-date">Date</label>
+            <input type="date" id="todo-date">
+            <label for="todo-time">Time</label>
+            <input type="time" id="todo-time">
+          </div>
           <button type="submit">Add</button>
         </form>
         <p id="add-error" class="error hidden"></p>
