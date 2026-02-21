@@ -31,12 +31,12 @@ python app.py
 
 Open **http://127.0.0.1:5000** in your browser.
 
-**Demo account:** `demo` / `demo`
+**Demo account:** `demo@example.com` / `demo`
 
 ## Features
 
-- **Sign up** – Create an account
-- **Sign in** – Log in with your credentials
+- **Sign up** – Create an account (email required)
+- **Sign in** – Log in with your email and password
 - **Todos** – Add tasks with optional descriptions
 - **Complete** – Click the checkbox to mark tasks done
 - **Log out** – End your session
@@ -58,9 +58,9 @@ Open **http://127.0.0.1:5000** in your browser.
 |--------|----------|-------------|
 | POST | `/register` | Create account |
 | POST | `/login` | Sign in |
-| GET | `/user/<name>/todos` | List todos |
-| POST | `/user/<name>/todos` | Add todo |
-| PATCH | `/user/<name>/todos/<id>` | Toggle todo completed |
+| GET | `/user/<email>/todos` | List todos |
+| POST | `/user/<email>/todos` | Add todo |
+| PATCH | `/user/<email>/todos/<id>` | Toggle todo completed |
 
 ## Optional: CLI test
 
