@@ -12,7 +12,7 @@ A simple full-stack todo application with user accounts.
 
 - HTM
 - CSS
-- Vanilla JavaScript
+- JavaScript
 - TypeScript
 - Flask
 - Python
