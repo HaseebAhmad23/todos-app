@@ -64,15 +64,9 @@
           <div class="add-form-fields">
             <input type="text" id="todo-title" placeholder="What needs to be done?" required>
             <input type="text" id="todo-desc" placeholder="Add a note (optional)">
-            <div class="add-form-datetime">
-              <div class="datetime-group">
-                <label for="todo-date">Date</label>
-                <input type="date" id="todo-date">
-              </div>
-              <div class="datetime-group">
-                <label for="todo-time">Time</label>
-                <input type="time" id="todo-time">
-              </div>
+            <div class="datetime-group">
+              <label for="todo-datetime">Date & time</label>
+              <input type="datetime-local" id="todo-datetime" class="datetime-input">
             </div>
           </div>
           <button type="submit" class="btn-add">Add task</button>

@@ -138,9 +138,8 @@ document.getElementById('add-todo-form').addEventListener('submit', async (e) =>
   const el = document.getElementById('add-error');
   const title = document.getElementById('todo-title').value.trim();
   const desc = document.getElementById('todo-desc').value.trim();
-  const date = document.getElementById('todo-date').value;
-  const time = document.getElementById('todo-time').value;
-  const due_at = date ? `${date}T${time || '00:00'}` : null;
+  const datetime = document.getElementById('todo-datetime').value;
+  const due_at = datetime || null;
   el.classList.add('hidden');
   try {
     const res = await fetch(`${API_BASE}/user/${currentUser}/todos`, {
@@ -152,8 +151,7 @@ document.getElementById('add-todo-form').addEventListener('submit', async (e) =>
     if (res.ok) {
       document.getElementById('todo-title').value = '';
       document.getElementById('todo-desc').value = '';
-      document.getElementById('todo-date').value = '';
-      document.getElementById('todo-time').value = '';
+      document.getElementById('todo-datetime').value = '';
       loadTodos();
     } else {
       el.textContent = data.error || 'Failed to add';
