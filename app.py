@@ -1,5 +1,6 @@
 import argparse
 import logging
+import re
 from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
@@ -10,8 +11,10 @@ app = Flask(__name__)
 CORS(app)
 FRONTEND_DIR = Path(__file__).parent / 'frontend'
 
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+
 # Seed demo user
-users_data['demo'] = User('demo', 'demo')
+users_data['demo@example.com'] = User('demo@example.com', 'demo')
 
 logging.basicConfig(
     filename='app.log',
@@ -35,12 +38,14 @@ def register():
         data = request.get_json()
         if not data:
             return jsonify({'error': 'Invalid JSON'}), 400
-        user_name = data.get('user_name', '').strip()
+        user_name = data.get('user_name', '').strip().lower()
         password = data.get('password', '')
         if not user_name or not password:
-            return jsonify({'error': 'Username and password required'}), 400
+            return jsonify({'error': 'Email and password required'}), 400
+        if not EMAIL_REGEX.match(user_name):
+            return jsonify({'error': 'Invalid email address'}), 400
         if user_name in users_data:
-            return jsonify({'error': 'Username already taken'}), 400
+            return jsonify({'error': 'Email already registered'}), 400
         users_data[user_name] = User(user_name, password)
         return jsonify({'msg': 'Account created'}), 201
     except Exception as e:
@@ -54,8 +59,10 @@ def login():
         data = request.get_json()
         if not data:
             return jsonify({'error': 'Invalid JSON'}), 400
-        user_name = data.get('user_name', '').strip()
+        user_name = data.get('user_name', '').strip().lower()
         password = data.get('password', '')
+        if not EMAIL_REGEX.match(user_name):
+            return jsonify({'error': 'Invalid email address'}), 400
         if user_name not in users_data:
             return jsonify({'error': 'User not found'}), 401
         if users_data[user_name].password != password:

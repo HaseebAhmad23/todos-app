@@ -8,19 +8,21 @@ def main():
     print('Todo API Demo\n' + '-' * 40)
 
     # Register
-    r = requests.post(f'{BASE}/register', json={'user_name': 'testuser', 'password': 'test123'})
+    email = 'test@example.com'
+    r = requests.post(f'{BASE}/register', json={'user_name': email, 'password': 'test123'})
     print(f'Register: {r.status_code} - {r.json()}')
 
     # Login
-    r = requests.post(f'{BASE}/login', json={'user_name': 'testuser', 'password': 'test123'})
+    r = requests.post(f'{BASE}/login', json={'user_name': email, 'password': 'test123'})
     print(f'Login:    {r.status_code} - {r.json()}')
 
-    # Add todo
-    r = requests.post(f'{BASE}/user/testuser/todos', json={'title': 'First task', 'description': 'Demo'})
+    # Add todo (encode email for URL)
+    from urllib.parse import quote
+    r = requests.post(f'{BASE}/user/{quote(email)}/todos', json={'title': 'First task', 'description': 'Demo'})
     print(f'Add todo: {r.status_code} - {r.json()}')
 
     # Get todos
-    r = requests.get(f'{BASE}/user/testuser/todos')
+    r = requests.get(f'{BASE}/user/{quote(email)}/todos')
     print(f'Get todos: {r.status_code} - {r.json()}')
 
     print('-' * 40 + '\nDone. Open http://127.0.0.1:5000 for the web UI.')

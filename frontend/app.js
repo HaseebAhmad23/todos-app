@@ -26,7 +26,7 @@ function showDashboard() {
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const el = document.getElementById('login-error');
-  const username = document.getElementById('login-username').value.trim();
+  const username = document.getElementById('login-username').value.trim().toLowerCase();
   const password = document.getElementById('login-password').value;
   el.classList.add('hidden');
   try {
@@ -53,7 +53,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 document.getElementById('register-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const el = document.getElementById('reg-error');
-  const username = document.getElementById('reg-username').value.trim();
+  const username = document.getElementById('reg-username').value.trim().toLowerCase();
   const password = document.getElementById('reg-password').value;
   el.classList.add('hidden');
   try {
@@ -87,7 +87,7 @@ document.getElementById('btn-logout').addEventListener('click', () => {
 async function loadTodos() {
   const list = document.getElementById('todo-list');
   try {
-    const res = await fetch(`${API_BASE}/user/${currentUser}/todos`);
+    const res = await fetch(`${API_BASE}/user/${encodeURIComponent(currentUser)}/todos`);
     const data = await res.json();
     const todos = res.ok ? (data.todos || []) : [];
     list.innerHTML = todos.length
@@ -126,7 +126,7 @@ function formatDueAt(dueAt) {
 
 async function toggleTodo(id) {
   try {
-    const res = await fetch(`${API_BASE}/user/${currentUser}/todos/${id}`, {
+    const res = await fetch(`${API_BASE}/user/${encodeURIComponent(currentUser)}/todos/${id}`, {
       method: 'PATCH'
     });
     if (res.ok) loadTodos();
@@ -142,7 +142,7 @@ document.getElementById('add-todo-form').addEventListener('submit', async (e) =>
   const due_at = datetime || null;
   el.classList.add('hidden');
   try {
-    const res = await fetch(`${API_BASE}/user/${currentUser}/todos`, {
+    const res = await fetch(`${API_BASE}/user/${encodeURIComponent(currentUser)}/todos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, description: desc, due_at: due_at || undefined })
