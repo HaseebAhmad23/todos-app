@@ -20,12 +20,19 @@ A simple full-stack todo application with user accounts.
 ## Quick start
 
 ```bash
-# Setup
+# 1. Create PostgreSQL database
+createdb todos_db
+
+# 2. Configure (optional; defaults to postgresql://localhost:5432/todos_db)
+cp .env.example .env
+# Edit .env with your DATABASE_URL if needed
+
+# 3. Setup Python
 python -m venv myenv
 source myenv/bin/activate      # Windows: myenv\Scripts\activate
 pip install -r requirements.txt
 
-# Run
+# 4. Run (init_db runs on startup)
 python app.py
 ```
 
@@ -45,7 +52,8 @@ Open **http://127.0.0.1:5000** in your browser.
 
 ```
 ├── app.py          # Flask API + serves frontend
-├── models.py       # User model, in-memory storage
+├── db.py           # PostgreSQL connection + repository
+├── schema.sql      # Database schema (users, todos)
 ├── frontend/       # Web UI (HTML, CSS, JS)
 ├── client.py       # CLI for API testing
 ├── utils/stats.py  # Log statistics (optional)
@@ -61,6 +69,7 @@ Open **http://127.0.0.1:5000** in your browser.
 | GET | `/user/<email>/todos` | List todos |
 | POST | `/user/<email>/todos` | Add todo |
 | PATCH | `/user/<email>/todos/<id>` | Toggle todo completed |
+| GET | `/todos/due-soon?within_minutes=60` | Todos due within N min (for n8n) |
 
 ## Optional: CLI test
 
@@ -73,3 +82,12 @@ python client.py
 ```bash
 python -m utils.stats --logfile app.log
 ```
+
+## n8n: 1-hour reminders
+
+Use `GET /todos/due-soon?within_minutes=60` in an n8n workflow:
+
+1. **Schedule trigger** – e.g. every 10–15 minutes
+2. **HTTP Request** – `GET http://your-server:5000/todos/due-soon?within_minutes=60`
+3. **Loop** – iterate over `{{ $json.todos }}`
+4. **Send notification** – email/push to `{{ $json.user_email }}` with `{{ $json.title }}` and `{{ $json.due_at }}`
