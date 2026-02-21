@@ -297,30 +297,32 @@ body {
   border-color: var(--accent);
 }
 
-.add-form-datetime {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
 .datetime-group {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .datetime-group label {
   font-size: 0.8rem;
   color: var(--text-muted);
-  white-space: nowrap;
+  font-weight: 500;
 }
 
-.datetime-group input {
-  padding: 0.4rem 0.6rem;
+.datetime-input {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-family: inherit;
+  background: var(--surface);
+  color-scheme: light;
+}
+
+.datetime-input:focus {
+  outline: none;
+  border-color: var(--accent);
 }
 
 .btn-add {
