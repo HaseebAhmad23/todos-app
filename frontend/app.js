@@ -91,8 +91,8 @@ async function loadTodos() {
     const data = await res.json();
     const todos = res.ok ? (data.todos || []) : [];
     list.innerHTML = todos.length
-      ? todos.map((t, i) => `
-          <li class="todo-item ${t.completed ? 'completed' : ''}" data-id="${i}">
+      ? todos.map((t) => `
+          <li class="todo-item ${t.completed ? 'completed' : ''}" data-id="${t.id}">
             <div class="todo-check"></div>
             <div class="todo-body">
               <p class="todo-title">${escapeHtml(t.title)}</p>

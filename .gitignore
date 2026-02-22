@@ -15,6 +15,9 @@ __pycache__/
 dist/
 build/
 
+# Environment
+.env
+
 # Logs
 app.log
 *.log
