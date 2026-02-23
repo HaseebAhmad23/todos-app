@@ -149,3 +149,35 @@ def toggle_todo(user_id, todo_id):
         'completed': r[4],
     }
 
+
+def get_todos_due_soon(within_minutes=60):
+    """
+    Return todos with due_at between now and now+within_minutes (for n8n).
+    Excludes completed todos.
+    """
+    with get_cursor() as cur:
+        cur.execute(
+            """
+            SELECT t.id, t.title, t.description, t.due_at, t.completed, u.email
+            FROM todos t
+            JOIN users u ON t.user_id = u.id
+            WHERE t.due_at IS NOT NULL
+              AND t.completed = FALSE
+              AND t.due_at > NOW()
+              AND t.due_at <= NOW() + INTERVAL '1 minute' * %s
+            ORDER BY t.due_at ASC
+            """,
+            (within_minutes,)
+        )
+        rows = cur.fetchall()
+    return [
+        {
+            'id': r[0],
+            'title': r[1],
+            'description': r[2] or '',
+            'due_at': r[3].isoformat() if r[3] else None,
+            'completed': r[4],
+            'user_email': r[5],
+        }
+        for r in rows
+    ]
