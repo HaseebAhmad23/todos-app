@@ -153,7 +153,7 @@ def toggle_todo(user_id, todo_id):
 def get_todos_due_soon(within_minutes=60):
     """
     Return todos with due_at between now and now+within_minutes (for n8n).
-    Excludes completed todos.
+    Excludes completed and already-notified todos.
     """
     with get_cursor() as cur:
         cur.execute(
@@ -163,6 +163,7 @@ def get_todos_due_soon(within_minutes=60):
             JOIN users u ON t.user_id = u.id
             WHERE t.due_at IS NOT NULL
               AND t.completed = FALSE
+              AND (t.notified = FALSE OR t.notified IS NULL)
               AND t.due_at > NOW()
               AND t.due_at <= NOW() + INTERVAL '1 minute' * %s
             ORDER BY t.due_at ASC
@@ -181,3 +182,13 @@ def get_todos_due_soon(within_minutes=60):
         }
         for r in rows
     ]
+
+
+def mark_todo_notified(todo_id):
+    """Mark a todo as notified (called by n8n after sending reminder). Returns True if updated."""
+    with get_cursor(commit=True) as cur:
+        cur.execute(
+            "UPDATE todos SET notified = TRUE WHERE id = %s",
+            (todo_id,)
+        )
+        return cur.rowcount > 0
