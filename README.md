@@ -89,14 +89,18 @@ python -m utils.stats --logfile app.log
 This project integrates **n8n** to automate reminder notifications for upcoming todo tasks. This ensures users receive timely reminders while preventing duplicate notifications.
 
 ---
-### 📌 Workflow Overview
+### Workflow Overview
 1. **Schedule trigger** – e.g. 60 minutes
 2. **HTTP Request** – `GET http://your-server:5000/todos/due-soon?within_minutes=60`
 3. **Code JavaScript** – iterate over `{{ $json.todos }}`
 4. **Send an Email** – email to `{{ $json.user_email }}` with `{{ $json.title }}` and `{{ $json.due_at }}`
 5. **Mark notified** – after each successful email, `PATCH http://your-server:5000/todos/{{ $json.id }}/mark-notified` (prevents duplicate reminders)
 ---
-### 🚀 How to Import the Workflow
+### Workflow Architecture
+
+![Workflow Diagram](n8n-workflows/n8n-worflow.png)
+---
+### How to Import the Workflow
 
 1. Open your n8n instance
 2. Click **Import Workflow**
