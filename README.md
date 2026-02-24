@@ -70,6 +70,7 @@ Open **http://127.0.0.1:5000** in your browser.
 | POST | `/user/<email>/todos` | Add todo |
 | PATCH | `/user/<email>/todos/<id>` | Toggle todo completed |
 | GET | `/todos/due-soon?within_minutes=60` | Todos due within N min (for n8n) |
+| PATCH | `/todos/<id>/mark-notified` | Mark todo as notified (call after sending email) |
 
 ## Optional: CLI test
 
@@ -83,11 +84,36 @@ python client.py
 python -m utils.stats --logfile app.log
 ```
 
-## n8n: 1-hour reminders
+## Workflow Automation with n8n
 
-Use `GET /todos/due-soon?within_minutes=60` in an n8n workflow:
+This project integrates **n8n** to automate reminder notifications for upcoming todo tasks. This ensures users receive timely reminders while preventing duplicate notifications.
 
-1. **Schedule trigger** – e.g. every 10–15 minutes
+---
+### 📌 Workflow Overview
+1. **Schedule trigger** – e.g. 60 minutes
 2. **HTTP Request** – `GET http://your-server:5000/todos/due-soon?within_minutes=60`
-3. **Loop** – iterate over `{{ $json.todos }}`
-4. **Send notification** – email/push to `{{ $json.user_email }}` with `{{ $json.title }}` and `{{ $json.due_at }}`
+3. **Code JavaScript** – iterate over `{{ $json.todos }}`
+4. **Send an Email** – email to `{{ $json.user_email }}` with `{{ $json.title }}` and `{{ $json.due_at }}`
+5. **Mark notified** – after each successful email, `PATCH http://your-server:5000/todos/{{ $json.id }}/mark-notified` (prevents duplicate reminders)
+---
+### 🚀 How to Import the Workflow
+
+1. Open your n8n instance
+2. Click **Import Workflow**
+3. Upload the JSON file
+4. Configure SMTP credentials
+5. Activate the workflow
+---
+### Security Notes
+
+- SMTP credentials are stored securely within n8n.
+- The backend endpoint can be protected with API keys.
+- Todos are marked as notified only after successful execution.
+---
+### Key Features
+
+- Automated scheduled execution
+- Dynamic email content using workflow expressions
+- Backend synchronization via API calls
+- Designed for scalability and production readiness
+---
