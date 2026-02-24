@@ -7,9 +7,9 @@
 ![Flask](https://img.shields.io/badge/Flask-Backend-black?style=for-the-badge&logo=flask&logoColor=white)
 ![n8n](https://img.shields.io/badge/n8n-Automation-EA4B71?style=for-the-badge&logo=flask&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-Structured%20Query%20Language-pink?style=for-the-badge&logo=databricks&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerized-bf248b?style=for-the-badge&logo=docker&logoColor=white)
 
-
-A simple full-stack todo application with user accounts. 
+A Full-stack task management application built with Flask and PostgreSQL, featuring a responsive frontend and automated reminder notifications powered by n8n workflow orchestration. The system includes scheduled task processing, email integration via SMTP, and Docker-based containerization for scalable deployment.
 
 ## Tech Stack:
 
