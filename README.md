@@ -5,6 +5,7 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-green?style=for-the-badge&logo=css3&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-Backend-black?style=for-the-badge&logo=flask&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-Automation-EA4B71?style=for-the-badge&logo=flask&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-Structured%20Query%20Language-pink?style=for-the-badge&logo=databricks&logoColor=white)
 
 
@@ -12,12 +13,12 @@ A simple full-stack todo application with user accounts.
 
 ## Stack:
 
-- HTM
-- CSS
 - JavaScript
 - TypeScript
+- HTML & CSS
 - Flask
 - Python
+- n8n
 
 ## Quick start
 
@@ -90,18 +91,17 @@ python -m utils.stats --logfile app.log
 
 This project integrates **n8n** to automate reminder notifications for upcoming todo tasks. This ensures users receive timely reminders while preventing duplicate notifications.
 
----
 ### Workflow Overview
 1. **Schedule trigger** – e.g. 60 minutes
 2. **HTTP Request** – `GET http://your-server:5000/todos/due-soon?within_minutes=60`
 3. **Code JavaScript** – iterate over `{{ $json.todos }}`
 4. **Send an Email** – email to `{{ $json.user_email }}` with `{{ $json.title }}` and `{{ $json.due_at }}`
 5. **Mark notified** – after each successful email, `PATCH http://your-server:5000/todos/{{ $json.id }}/mark-notified` (prevents duplicate reminders)
----
+
 ### Workflow Architecture
 
 ![Workflow Diagram](n8n-workflows/n8n-worflow.png)
----
+
 ### How to Import the Workflow
 
 1. Open your n8n instance
@@ -109,17 +109,4 @@ This project integrates **n8n** to automate reminder notifications for upcoming 
 3. Upload the JSON file
 4. Configure SMTP credentials
 5. Activate the workflow
----
-### Security Notes
 
-- SMTP credentials are stored securely within n8n.
-- The backend endpoint can be protected with API keys.
-- Todos are marked as notified only after successful execution.
----
-### Key Features
-
-- Automated scheduled execution
-- Dynamic email content using workflow expressions
-- Backend synchronization via API calls
-- Designed for scalability and production readiness
----
