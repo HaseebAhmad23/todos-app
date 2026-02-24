@@ -16,6 +16,7 @@ from db import (
     create_todo,
     toggle_todo,
     get_todos_due_soon,
+    mark_todo_notified,
 )
 
 app = Flask(__name__)
@@ -146,6 +147,19 @@ def todos_due_soon():
         within = max(1, min(1440, within))  # 1–1440 minutes
         todos = get_todos_due_soon(within_minutes=within)
         return jsonify({'todos': todos}), 200
+    except Exception as e:
+        logging.exception(str(e))
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/todos/<int:todo_id>/mark-notified', methods=['PATCH'])
+def mark_todo_notified_route(todo_id):
+    """Mark todo as notified after n8n sends the reminder email. Prevents duplicate notifications."""
+    try:
+        ok = mark_todo_notified(todo_id)
+        if not ok:
+            return jsonify({'error': 'Todo not found'}), 404
+        return jsonify({'msg': 'Marked as notified'}), 200
     except Exception as e:
         logging.exception(str(e))
         return jsonify({'error': str(e)}), 500

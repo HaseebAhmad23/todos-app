@@ -1,0 +1,153 @@
+{
+  "name": "todos-app-workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        -32
+      ],
+      "id": "39020f12-e0b9-49cf-9bc1-8e616cca1e63",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "fromEmail": "wazirstudios@gmail.com",
+        "toEmail": "={{$json.user_email}}",
+        "subject": "=Reminder: {{$json.title}}",
+        "emailFormat": "text",
+        "text": "=Your task \"{{$json.title}}\" is due at {{$json.due_at}}.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        160,
+        -112
+      ],
+      "id": "6dc35b00-4dcb-4aeb-82c6-e71f712b5474",
+      "name": "Send an Email",
+      "webhookId": "7f07c831-854a-4f4d-8824-11d1ba3fc9a7",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "alwaysOutputData": true,
+      "credentials": {
+        "smtp": {
+          "id": "IHPMR2PojLCoDgPx",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $json.todos.map(todo => ({\n  json: todo\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -32
+      ],
+      "id": "a0f04974-ae1a-46c7-9b12-ac70aa200d56",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:5000/todos/due-soon?within_minutes=1440",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -240,
+        -32
+      ],
+      "id": "29638044-3246-4e3b-8b6f-9fde3daa65c0",
+      "name": "HTTP Get Request"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=http://host.docker.internal:5000/todos/{{ $json.id }}/mark-notified",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        160,
+        48
+      ],
+      "id": "c887fc92-8f4c-4fc7-a255-d0c4033a16e6",
+      "name": "HTTP Patch Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Get Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Patch Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Get Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7ae16f02-59fc-46e6-bc92-40fa19d49930",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fe1ca386f780ccb28fe137acba6b95fcd5af3704e55150dc4c3cc34277ab767a"
+  },
+  "id": "aLpRix2mlDZWVzc5",
+  "tags": []
+}
