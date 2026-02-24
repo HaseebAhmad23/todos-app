@@ -11,13 +11,18 @@
 
 A simple full-stack todo application with user accounts. 
 
-## Stack:
+## Tech Stack:
 
+### Frontend
 - JavaScript
 - TypeScript
 - HTML & CSS
-- Flask
+### Backend
 - Python
+- Flask 
+### Database
+- PostgreSQL
+### Workflow Automation
 - n8n
 
 ## Quick start
