@@ -115,3 +115,6 @@ This project integrates **n8n** to automate reminder notifications for upcoming 
 4. Configure SMTP credentials
 5. Activate the workflow
 
+## Author
+
+Haseeb Ahmad (Fullstack Developer)
